@@ -40,13 +40,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Prototype Development
 
-- **PROTOTYPE_SETUP_GUIDE.md** - Unity setup guide for playable prototype ⚡ **START HERE**
+- **PROTOTYPE_SETUP_GUIDE.md** - Unity setup guide for playable prototype
   - Step-by-step Unity installation and configuration
   - Placeholder UI with colored rectangles
   - Complete C# flight control script (ShipController.cs)
   - Debris spawning system
   - Collision detection
   - 1-2 week timeline to playable demo
+
+- **web-prototype/** - HTML5/JavaScript web prototype ⚡ **PLAY NOW**
+  - Single-file playable demo (no installation)
+  - 6DOF space flight controls
+  - Retro green cockpit UI overlay
+  - 3D debris field with collision
+  - Runs in any browser
+  - Perfect for rapid iteration
 
 ## Project Status
 

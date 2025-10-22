@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harbinger - Prototype</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            font-family: 'Courier New', monospace;
+            color: #0f0;
+            overflow: hidden;
+        }
+
+        #gameCanvas {
+            display: block;
+            background: #000;
+        }
+
+        /* Cockpit UI Overlay */
+        .cockpit-ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: rgba(70, 70, 70, 0.9);
+            border-bottom: 2px solid #0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ship-name {
+            color: #fff;
+            font-size: 16px;
+            letter-spacing: 2px;
+        }
+
+        .warning-light {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #0f0;
+            position: absolute;
+            top: 12px;
+            animation: pulse 2s infinite;
+        }
+
+        .warning-left { left: 20px; }
+        .warning-right { right: 20px; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Left Panel */
+        .left-panel {
+            position: absolute;
+            left: 0;
+            top: 40px;
+            bottom: 100px;
+            width: 200px;
+            background: rgba(30, 30, 30, 0.8);
+            border-right: 2px solid #0f0;
+            padding: 20px;
+        }
+
+        /* Right Panel */
+        .right-panel {
+            position: absolute;
+            right: 0;
+            top: 40px;
+            bottom: 100px;
+            width: 200px;
+            background: rgba(30, 30, 30, 0.8);
+            border-left: 2px solid #0f0;
+            padding: 20px;
+        }
+
+        /* Bottom Panel */
+        .bottom-panel {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 100px;
+            background: rgba(40, 40, 40, 0.9);
+            border-top: 2px solid #0f0;
+            padding: 15px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .gauge {
+            margin-bottom: 25px;
+        }
+
+        .gauge-label {
+            font-size: 12px;
+            margin-bottom: 5px;
+            color: #0f0;
+        }
+
+        .gauge-bar {
+            width: 100%;
+            height: 15px;
+            background: rgba(0, 50, 0, 0.5);
+            border: 1px solid #0f0;
+            position: relative;
+        }
+
+        .gauge-fill {
+            height: 100%;
+            background: #0f0;
+            transition: width 0.2s;
+        }
+
+        .gauge-value {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #fff;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        .radar {
+            width: 150px;
+            height: 150px;
+            border: 2px solid #0f0;
+            border-radius: 50%;
+            background: rgba(0, 50, 0, 0.3);
+            position: relative;
+            margin: 0 auto 20px;
+        }
+
+        .radar-center {
+            width: 4px;
+            height: 4px;
+            background: #0f0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 5px #0f0;
+        }
+
+        .radar-blip {
+            width: 6px;
+            height: 6px;
+            background: #ff0;
+            position: absolute;
+            border-radius: 50%;
+            box-shadow: 0 0 3px #ff0;
+        }
+
+        .status-text {
+            font-size: 11px;
+            margin: 8px 0;
+            color: #0f0;
+        }
+
+        .status-text.warning {
+            color: #fa0;
+        }
+
+        .status-text.danger {
+            color: #f00;
+        }
+
+        .controls-help {
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .crash-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .crash-overlay.active {
+            display: flex;
+            animation: flashRed 0.5s infinite;
+        }
+
+        @keyframes flashRed {
+            0%, 100% { background: rgba(255, 0, 0, 0.5); }
+            50% { background: rgba(255, 0, 0, 0.2); }
+        }
+
+        .crash-text {
+            font-size: 48px;
+            color: #fff;
+            text-shadow: 2px 2px 4px #000;
+            margin-bottom: 20px;
+        }
+
+        .crash-subtext {
+            font-size: 20px;
+            color: #fff;
+        }
+
+        .thrust-indicator {
+            display: grid;
+            grid-template-columns: repeat(3, 30px);
+            grid-template-rows: repeat(3, 30px);
+            gap: 5px;
+        }
+
+        .thrust-arrow {
+            width: 30px;
+            height: 30px;
+            background: rgba(50, 50, 50, 0.5);
+            border: 1px solid #0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .thrust-arrow.active {
+            background: rgba(0, 200, 255, 0.7);
+            color: #0cf;
+            box-shadow: 0 0 10px #0cf;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Cockpit UI Overlay -->
+    <div class="cockpit-ui">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="warning-light warning-left"></div>
+            <div class="ship-name">USCSS HARBINGER - PROSPECTOR CLASS</div>
+            <div class="warning-light warning-right"></div>
+        </div>
+
+        <!-- Left Panel -->
+        <div class="left-panel">
+            <div class="gauge">
+                <div class="gauge-label">FUEL</div>
+                <div class="gauge-bar">
+                    <div class="gauge-fill" id="fuelBar" style="width: 100%;"></div>
+                    <div class="gauge-value" id="fuelValue">100%</div>
+                </div>
+            </div>
+            <div class="gauge">
+                <div class="gauge-label">VELOCITY</div>
+                <div class="gauge-bar">
+                    <div class="gauge-fill" id="velocityBar" style="width: 0%;"></div>
+                    <div class="gauge-value" id="velocityValue">0.0 M/S</div>
+                </div>
+            </div>
+            <div class="gauge">
+                <div class="gauge-label">HULL INTEGRITY</div>
+                <div class="gauge-bar">
+                    <div class="gauge-fill" id="hullBar" style="width: 100%;"></div>
+                    <div class="gauge-value" id="hullValue">100%</div>
+                </div>
+            </div>
+            <div class="status-text">SYSTEMS: NOMINAL</div>
+            <div class="status-text">PHASE: ORBITAL</div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="right-panel">
+            <div class="radar" id="radar">
+                <div class="radar-center"></div>
+            </div>
+            <div class="status-text">THREAT: <span id="threatLevel">0%</span></div>
+            <div class="status-text">SCANS: <span id="scanCount">0/5</span></div>
+            <div class="status-text">DISTANCE: <span id="distanceValue">0</span>M</div>
+        </div>
+
+        <!-- Bottom Panel -->
+        <div class="bottom-panel">
+            <div class="controls-help">
+                W/S: Forward/Back<br>
+                A/D: Strafe<br>
+                Space/Shift: Up/Down<br>
+                Arrows: Rotate<br>
+                R: Reset | F: Refuel
+            </div>
+            <div class="thrust-indicator">
+                <div class="thrust-arrow" id="thrust-none"></div>
+                <div class="thrust-arrow" id="thrust-up">↑</div>
+                <div class="thrust-arrow" id="thrust-none2"></div>
+                <div class="thrust-arrow" id="thrust-left">←</div>
+                <div class="thrust-arrow" id="thrust-center">◆</div>
+                <div class="thrust-arrow" id="thrust-right">→</div>
+                <div class="thrust-arrow" id="thrust-none3"></div>
+                <div class="thrust-arrow" id="thrust-down">↓</div>
+                <div class="thrust-arrow" id="thrust-none4"></div>
+            </div>
+        </div>
+
+        <!-- Crash Overlay -->
+        <div class="crash-overlay" id="crashOverlay">
+            <div class="crash-text">COLLISION DETECTED</div>
+            <div class="crash-subtext">HULL BREACH - MISSION FAILED</div>
+            <div class="crash-subtext" style="margin-top: 20px;">Restarting in <span id="restartTimer">3</span>...</div>
+        </div>
+    </div>
+
+    <script>
+        // Game Setup
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Game State
+        const game = {
+            ship: {
+                x: 0,
+                y: 0,
+                z: 0,
+                vx: 0,
+                vy: 0,
+                vz: 0,
+                rotX: 0,
+                rotY: 0,
+                fuel: 100,
+                hull: 100,
+                maxSpeed: 20
+            },
+            debris: [],
+            stars: [],
+            keys: {},
+            crashed: false,
+            scans: 0,
+            distance: 0
+        };
+
+        // Initialize Stars (background)
+        for (let i = 0; i < 200; i++) {
+            game.stars.push({
+                x: (Math.random() - 0.5) * 2000,
+                y: (Math.random() - 0.5) * 2000,
+                z: Math.random() * 1000 + 100
+            });
+        }
+
+        // Initialize Debris Field
+        for (let i = 0; i < 20; i++) {
+            game.debris.push({
+                x: (Math.random() - 0.5) * 200,
+                y: (Math.random() - 0.5) * 200,
+                z: Math.random() * 200 + 50,
+                size: Math.random() * 10 + 5,
+                rotSpeed: (Math.random() - 0.5) * 0.02,
+                rotation: Math.random() * Math.PI * 2
+            });
+        }
+
+        // Input Handling
+        window.addEventListener('keydown', (e) => {
+            game.keys[e.key] = true;
+            game.keys[e.code] = true;
+        });
+
+        window.addEventListener('keyup', (e) => {
+            game.keys[e.key] = false;
+            game.keys[e.code] = false;
+        });
+
+        // Reset Function
+        function reset() {
+            game.ship.x = 0;
+            game.ship.y = 0;
+            game.ship.z = 0;
+            game.ship.vx = 0;
+            game.ship.vy = 0;
+            game.ship.vz = 0;
+            game.ship.rotX = 0;
+            game.ship.rotY = 0;
+            game.ship.fuel = 100;
+            game.ship.hull = 100;
+            game.crashed = false;
+            game.scans = 0;
+            document.getElementById('crashOverlay').classList.remove('active');
+        }
+
+        // Update Game Logic
+        function update(dt) {
+            if (game.crashed) return;
+
+            const ship = game.ship;
+            const thrust = 0.3;
+            const rotSpeed = 0.05;
+            const fuelConsumption = 0.5;
+
+            // Rotation Input (Arrow Keys)
+            if (game.keys['ArrowUp']) ship.rotX += rotSpeed;
+            if (game.keys['ArrowDown']) ship.rotX -= rotSpeed;
+            if (game.keys['ArrowLeft']) ship.rotY -= rotSpeed;
+            if (game.keys['ArrowRight']) ship.rotY += rotSpeed;
+
+            // Thrust Input (WASD + Space/Shift)
+            let thrusting = false;
+            let thrustX = 0, thrustY = 0, thrustZ = 0;
+
+            if (game.keys['w'] || game.keys['W']) {
+                thrustZ = thrust;
+                thrusting = true;
+                updateThrustIndicator('forward');
+            } else if (game.keys['s'] || game.keys['S']) {
+                thrustZ = -thrust;
+                thrusting = true;
+                updateThrustIndicator('back');
+            }
+
+            if (game.keys['a'] || game.keys['A']) {
+                thrustX = -thrust;
+                thrusting = true;
+                updateThrustIndicator('left');
+            } else if (game.keys['d'] || game.keys['D']) {
+                thrustX = thrust;
+                thrusting = true;
+                updateThrustIndicator('right');
+            }
+
+            if (game.keys[' '] || game.keys['Space']) {
+                thrustY = thrust;
+                thrusting = true;
+                updateThrustIndicator('up');
+            } else if (game.keys['Shift']) {
+                thrustY = -thrust;
+                thrusting = true;
+                updateThrustIndicator('down');
+            }
+
+            if (!thrusting) {
+                updateThrustIndicator('none');
+            }
+
+            // Apply thrust in ship's local space (simplified)
+            if (ship.fuel > 0 && thrusting) {
+                ship.vx += thrustX * Math.cos(ship.rotY);
+                ship.vy += thrustY;
+                ship.vz += thrustZ * Math.sin(ship.rotY);
+                ship.fuel -= fuelConsumption * dt;
+                ship.fuel = Math.max(0, ship.fuel);
+            }
+
+            // Apply velocity
+            ship.x += ship.vx * dt;
+            ship.y += ship.vy * dt;
+            ship.z += ship.vz * dt;
+
+            // Limit max speed
+            const speed = Math.sqrt(ship.vx ** 2 + ship.vy ** 2 + ship.vz ** 2);
+            if (speed > ship.maxSpeed) {
+                const factor = ship.maxSpeed / speed;
+                ship.vx *= factor;
+                ship.vy *= factor;
+                ship.vz *= factor;
+            }
+
+            // Update distance
+            game.distance = Math.sqrt(ship.x ** 2 + ship.y ** 2 + ship.z ** 2);
+
+            // Update debris rotation
+            game.debris.forEach(d => {
+                d.rotation += d.rotSpeed;
+            });
+
+            // Collision Detection
+            game.debris.forEach(d => {
+                const dx = ship.x - d.x;
+                const dy = ship.y - d.y;
+                const dz = ship.z - d.z;
+                const dist = Math.sqrt(dx ** 2 + dy ** 2 + dz ** 2);
+
+                if (dist < d.size + 2) { // Ship radius ~2
+                    crash();
+                }
+            });
+
+            // Debug: Reset and Refuel
+            if (game.keys['r'] || game.keys['R']) reset();
+            if (game.keys['f'] || game.keys['F']) ship.fuel = 100;
+
+            // Update UI
+            updateUI();
+        }
+
+        function updateThrustIndicator(direction) {
+            const arrows = ['up', 'down', 'left', 'right', 'forward', 'back'];
+            arrows.forEach(dir => {
+                const el = document.getElementById(`thrust-${dir}`);
+                if (el) el.classList.remove('active');
+            });
+
+            // Map directions to UI elements (simplified)
+            if (direction === 'up') document.getElementById('thrust-up').classList.add('active');
+            if (direction === 'down') document.getElementById('thrust-down').classList.add('active');
+            if (direction === 'left') document.getElementById('thrust-left').classList.add('active');
+            if (direction === 'right') document.getElementById('thrust-right').classList.add('active');
+            if (direction === 'forward') document.getElementById('thrust-up').classList.add('active');
+            if (direction === 'back') document.getElementById('thrust-down').classList.add('active');
+        }
+
+        function updateUI() {
+            const ship = game.ship;
+            const speed = Math.sqrt(ship.vx ** 2 + ship.vy ** 2 + ship.vz ** 2);
+
+            // Fuel
+            document.getElementById('fuelBar').style.width = ship.fuel + '%';
+            document.getElementById('fuelValue').textContent = Math.round(ship.fuel) + '%';
+            document.getElementById('fuelBar').style.background =
+                ship.fuel > 50 ? '#0f0' : ship.fuel > 25 ? '#fa0' : '#f00';
+
+            // Velocity
+            const speedPercent = (speed / ship.maxSpeed) * 100;
+            document.getElementById('velocityBar').style.width = Math.min(speedPercent, 100) + '%';
+            document.getElementById('velocityValue').textContent = speed.toFixed(1) + ' M/S';
+
+            // Hull
+            document.getElementById('hullBar').style.width = ship.hull + '%';
+            document.getElementById('hullValue').textContent = Math.round(ship.hull) + '%';
+
+            // Distance
+            document.getElementById('distanceValue').textContent = Math.round(game.distance);
+
+            // Scans
+            document.getElementById('scanCount').textContent = game.scans + '/5';
+
+            // Update Radar Blips
+            updateRadar();
+        }
+
+        function updateRadar() {
+            const radar = document.getElementById('radar');
+            const radarRadius = 75; // Half of 150px
+
+            // Clear existing blips
+            const existingBlips = radar.querySelectorAll('.radar-blip');
+            existingBlips.forEach(b => b.remove());
+
+            // Add debris blips
+            game.debris.forEach(d => {
+                const dx = d.x - game.ship.x;
+                const dy = d.y - game.ship.y;
+                const dz = d.z - game.ship.z;
+                const dist = Math.sqrt(dx ** 2 + dy ** 2 + dz ** 2);
+
+                if (dist < 100) { // Show if within 100 units
+                    const angle = Math.atan2(dy, dx);
+                    const radarDist = Math.min((dist / 100) * radarRadius, radarRadius - 3);
+
+                    const blipX = radarRadius + Math.cos(angle) * radarDist;
+                    const blipY = radarRadius + Math.sin(angle) * radarDist;
+
+                    const blip = document.createElement('div');
+                    blip.className = 'radar-blip';
+                    blip.style.left = blipX + 'px';
+                    blip.style.top = blipY + 'px';
+                    radar.appendChild(blip);
+                }
+            });
+        }
+
+        function crash() {
+            game.crashed = true;
+            document.getElementById('crashOverlay').classList.add('active');
+
+            let countdown = 3;
+            document.getElementById('restartTimer').textContent = countdown;
+
+            const timer = setInterval(() => {
+                countdown--;
+                document.getElementById('restartTimer').textContent = countdown;
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    reset();
+                }
+            }, 1000);
+        }
+
+        // Render Function (3D Projection)
+        function render() {
+            const w = canvas.width;
+            const h = canvas.height;
+            const cx = w / 2;
+            const cy = h / 2;
+            const fov = 400;
+
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, w, h);
+
+            // Render Stars
+            ctx.fillStyle = '#fff';
+            game.stars.forEach(star => {
+                const dx = star.x - game.ship.x;
+                const dy = star.y - game.ship.y;
+                const dz = star.z - game.ship.z;
+
+                if (dz > 0) {
+                    const scale = fov / dz;
+                    const x = cx + dx * scale;
+                    const y = cy + dy * scale;
+                    const size = Math.max(1, scale * 0.5);
+
+                    if (x > 0 && x < w && y > 0 && y < h) {
+                        ctx.beginPath();
+                        ctx.arc(x, y, size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            });
+
+            // Render Debris
+            game.debris.forEach(d => {
+                const dx = d.x - game.ship.x;
+                const dy = d.y - game.ship.y;
+                const dz = d.z - game.ship.z;
+
+                if (dz > 0) {
+                    const scale = fov / dz;
+                    const x = cx + dx * scale;
+                    const y = cy + dy * scale;
+                    const size = d.size * scale;
+
+                    if (x > -size && x < w + size && y > -size && y < h + size) {
+                        ctx.save();
+                        ctx.translate(x, y);
+                        ctx.rotate(d.rotation);
+
+                        // Draw simple cube (square for now)
+                        ctx.fillStyle = '#444';
+                        ctx.strokeStyle = '#666';
+                        ctx.lineWidth = 2;
+                        ctx.fillRect(-size, -size, size * 2, size * 2);
+                        ctx.strokeRect(-size, -size, size * 2, size * 2);
+
+                        ctx.restore();
+                    }
+                }
+            });
+
+            // Crosshair
+            ctx.strokeStyle = '#0f0';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(cx - 20, cy);
+            ctx.lineTo(cx + 20, cy);
+            ctx.moveTo(cx, cy - 20);
+            ctx.lineTo(cx, cy + 20);
+            ctx.stroke();
+        }
+
+        // Game Loop
+        let lastTime = Date.now();
+        function gameLoop() {
+            const now = Date.now();
+            const dt = (now - lastTime) / 1000; // Delta time in seconds
+            lastTime = now;
+
+            update(dt);
+            render();
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Handle Window Resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Start Game
+        gameLoop();
+    </script>
+</body>
+</html>
