@@ -1,0 +1,419 @@
+================================================================================
+  HARBINGER - COCKPIT ASCII MOCKUP (320x224 pixels @ SNES resolution)
+================================================================================
+
+This file contains ASCII art mockups of the cockpit design for reference.
+Use these as templates when creating pixel art in Aseprite.
+
+Scale: Each character ≈ 4 pixels in actual implementation
+
+
+================================================================================
+1. FULL COCKPIT VIEW - NORMAL STATE
+================================================================================
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║ ◉  USCSS HARBINGER  -  WEYLAND-YUTANI CORP  -  PROSPECTOR CLASS       ◉ ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║◯                                                                         ◯║
+║║  ┌────┐                                                      ┌────────┐ ║
+║║  │ /\ │ FUEL                                            RADAR│ · │ · │ ║
+║║  │/  \│ 87%                                                  │   │   │ ║
+║║  └────┘                                                      │─┼─┼─┼─│ ║
+║◯                                                              │ · │ · │ ◯║
+║║  ┌────┐                                                      └────────┘ ║
+║║  │ /\ │ VEL              ╔════════════════════════╗                    ║
+║║  │/  \│ 4.2              ║                        ║         THREAT     ║
+║║  └────┘                  ║                        ║         ├────────┤ ║
+║◯                          ║                        ║         ██░░░░░░░░ ║
+║║  ┌────┐                  ║   3D FLIGHT WINDOW     ║                    ║
+║║  │TEMP│                  ║                        ║         SYSTEMS    ║
+║║  │ ││ │ C  H             ║    (Low-poly 3D        ║         ENG [████]  ║
+║║  │ ██ │                  ║     rendered here)     ║         SHD [███░]  ║
+║║  └────┘                  ║                        ║         RCS [████]  ║
+║◯                          ║                        ║         SNR [███░]  ║
+║║ ┌──┬──┬──┐               ║                        ║         LND [████]  ║
+║║ │  │  │▓▓│  WARN         ║                        ║                    ║
+║║ ├──┼──┼──┤               ╚════════════════════════╝                    ║
+║║ │▓▓│  │  │                                                ┌──────────┐ ║
+║║ └──┴──┴──┘                                                │  MSG 17  │ ║
+║◯                                                           │ MAINTAIN │ ║
+║║    ╔═══╗                                                  │ ALTITUDE │ ║
+║║   ╔╝ ▓ ╚╗  HULL                                           │  1200 M  │ ║
+║║  ╔╝  ▓  ╚╗ 87%                                            └──────────┘ ║
+║║ ╔╝   ▓   ╚╗                                                            ║
+║║═══════════║                                                            ║
+║║ ╚╗      ╔╝                                                             ║
+║║  ╚╗    ╔╝                                                              ║
+║║   ╚════╝                                                               ║
+║◯                                                                        ◯║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║ ┌─┐ ┌─┐ ┌─┐ ┌─┐      ╔══════════════════════╗      ↑       ┌───┐      ║
+║ │█│ │░│ │█│ │░│      ║ ALT: 1247 M          ║    ← ◊ →     │ ! │      ║
+║ └┬┘ └┬┘ └┬┘ └┬┘      ║ VEL:  34  M/S        ║      ↓       ║   ║      ║
+║  A   M   S   G        ╚══════════════════════╝              └───┘      ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+Legend:
+  ◉ = Warning lights (corners, green when OK)
+  ◯ = Structural rivets
+  /\ = Gauge needles
+  ██ = Filled bars (fuel, temp, systems)
+  ░  = Empty bars
+  ▓  = Damaged sections (ship schematic)
+  ◊  = Player ship indicator (thrust display)
+  !  = Emergency handle
+
+
+================================================================================
+2. LEFT PANEL DETAIL - INSTRUMENTS
+================================================================================
+
+┌────────────────┐
+│                │
+│  ┌────┐  FUEL │
+│  │ /\ │  87%  │  ← Circular gauge, needle rotates
+│  │/  \│       │     Green when >50%, amber 25-50%, red <25%
+│  │ ──  │       │
+│  └────┘       │
+│               │
+│  ┌────┐  VEL  │
+│  │    │  4.2  │  ← Velocity in arbitrary units (0-9)
+│  │ /\ │       │
+│  └────┘       │
+│               │
+│  ┌────┐  TEMP │
+│  │ C H│       │  ← Temperature bar gauge
+│  │ ││ │       │     C=Cold, H=Hot, fills red when overheating
+│  │ ██ │       │
+│  └────┘       │
+│               │
+│ ┌──┬──┬──┐    │
+│ │  │  │▓▓│    │  ← Warning lights grid (2x3)
+│ ├──┼──┼──┤    │     1=Engine, 2=Hull, 3=Systems
+│ │▓▓│  │  │    │     4=Landing, 5=Fuel, 6=Comms
+│ └──┴──┴──┘    │     Off(gray), Caution(amber), Alert(red)
+│  1  2  3      │
+│  4  5  6      │
+│               │
+│    ╔═══╗      │
+│   ╔╝ ▓ ╚╗     │  ← Ship damage schematic (top-down)
+│  ╔╝  ▓  ╚╗    │     8 sections, turns red when damaged
+│ ╔╝   ▓   ╚╗   │     Percentage below
+│═══════════║   │
+│ ╚╗      ╔╝    │
+│  ╚╗    ╔╝     │
+│   ╚════╝      │
+│    HULL 87%   │
+│               │
+└────────────────┘
+
+
+================================================================================
+3. RIGHT PANEL DETAIL - RADAR & STATUS
+================================================================================
+
+┌────────────────┐
+│                │
+│    RADAR       │
+│  ┌──────────┐  │
+│  │    ·│·   │  │  ← Circular radar scope (50x50 pixels)
+│  │  ·  │  · │  │     Rotating sweep line (8 frames)
+│  │─────┼────│  │     Green blips = debris/objects
+│  │  ·  │  · │  │     Red blip = threat
+│  │    ·│·   │  │     Center crosshair = player
+│  └──────────┘  │
+│                │
+│    THREAT      │
+│  ├──────────┤  │
+│  ██░░░░░░░░░   │  ← Proximity meter, fills red as threat approaches
+│                │     Pulses when >75%, flashes white at 100%
+│                │
+│   SYSTEMS      │
+│  ENG [████░]   │  ← Engine power
+│  SHD [██░░░]   │  ← Heat shield integrity
+│  RCS [█████]   │  ← Reaction control system
+│  SNR [███░░]   │  ← Sensors
+│  LND [█████]   │  ← Landing gear status
+│                │     Green=OK, Amber=Damaged, Red=Critical
+│                │     Flickers when malfunctioning
+│                │
+│ ┌────────────┐ │
+│ │  MSG 017   │ │  ← Communications panel
+│ │            │ │     Green terminal text (3x5 font)
+│ │  MAINTAIN  │ │     Scrolls vertically
+│ │  ALTITUDE  │ │     Corporate messages, alerts
+│ │   1200 M   │ │     CRT flicker effect (2 frames)
+│ │            │ │
+│ └────────────┘ │
+│                │
+└────────────────┘
+
+
+================================================================================
+4. BOTTOM CONSOLE DETAIL - CONTROLS & READOUT
+================================================================================
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐                                         ║
+║ │█│ │░│ │█│ │░│ │█│ │░│ │█│ │░│    Toggle switches (up=on, down=off)  ║
+║ └┬┘ └┬┘ └┬┘ └┬┘ └┬┘ └┬┘ └┬┘ └┬┘                                         ║
+║  A   M   S   G   L   C   F   D     Labels: A=Auto, M=Manual, S=Scan    ║
+║                                            G=Gear, L=Lights, C=Comms     ║
+║                                            F=Flaps, D=Diagnostics        ║
+║                                                                           ║
+║              ╔══════════════════════════╗                                ║
+║              ║  ALT: 1247  M           ║   Central text readout         ║
+║              ║  VEL:  34   M/S         ║   Green terminal font          ║
+║              ║  HDG:  270  DEG         ║   Updates every second         ║
+║              ╚══════════════════════════╝   2-3 lines of critical data  ║
+║                                                                           ║
+║                                              THRUST                       ║
+║                                                ↑                          ║
+║                                              ← ◊ →    Direction display  ║
+║                                                ↓      Lights up cyan     ║
+║                                                       when firing        ║
+║                                                                           ║
+║                                                         ┌───┐            ║
+║                                                         │ ! │  Emergency ║
+║                                                         ║   ║  handle    ║
+║                                                         ║   ║  (red)     ║
+║                                                         └───┘            ║
+║                                                        EJECT             ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+================================================================================
+5. DAMAGED STATE - CRITICAL HULL INTEGRITY (<25%)
+================================================================================
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║ █  USCSS HARB█NGER  -  WEYLAND-Y█TANI CORP  -  PROSPEC█OR CLASS     ▓ ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║░                                                                        ▓║
+║║  ┌────┐                                                      ┌──░─────┐ ║
+║▓  │ /\ │ FU█L                                            RADA█│ · │ · │ ║
+║║  │/  \│ 23%                                                  │ ░ │   │ ║
+║║  └────┘                                                      │─┼─░─┼─│ ║
+║█                                                              │ · │ · │ █║
+║║  ┌────┐                                                      └────────┘ ║
+║║  │ /\ │ VEL              ╔════════════════════════╗                    ║
+║░  │/  \│ 8.7              ║ ░                      ║         THREAT     ║
+║║  └────┘                  ║   ░  ▓                 ║         ├────────┤ ║
+║▓                          ║          █             ║         █████████░ ║
+║║  ┌────┐                  ║   3D FLIGHT ░INDOW     ║                    ║
+║║  │TEMP│                  ║         ▓              ║         SYSTEMS    ║
+║█  │ ││ │ C  H             ║    (Low-po█y 3D        ║         ENG [█░░░]  ║
+║║  │███░│                  ║   ░ rendered here)     ║         SHD [░░░░]  ║
+║║  └────┘                  ║            ░           ║         RCS [██░░]  ║
+║░                          ║             ▓          ║         SNR [░░░░]  ║
+║║ ┌──┬──┬──┐               ║                        ║         LND [█░░░]  ║
+║║ │▓▓│▓▓│▓▓│  WARN         ║         █              ║                    ║
+║▓ ├──┼──┼──┤               ╚════════════════════════╝                    ║
+║║ │▓▓│▓▓│▓▓│  ALL LIT!                                      ┌──────────┐ ║
+║║ └──┴──┴──┘                                                │! EMERGEN█│ ║
+║█                                                           │  RETURN  │ ║
+║║    ╔═══╗                                                  │ TO ORBIT │ ║
+║║   ╔╝▓▓▓╚╗  HULL                                           │  IMMEDI█ │ ║
+║░  ╔╝▓▓▓▓▓╚╗ 18%  ← CRITICAL!                               └──────────┘ ║
+║║ ╔╝▓▓▓▓▓▓▓╚╗      All damaged sections red                              ║
+║▓═══════════║                                                            ║
+║║ ╚╗▓▓▓▓▓▓╔╝                                                             ║
+║║  ╚╗▓▓▓▓╔╝                                                              ║
+║█   ╚════╝                                                               ║
+║░                                                                        ▓║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║ ┌█┐ ┌░┐ ┌█┐ ┌▓┐      ╔══════════════════════╗      ↑       ┌───┐      ║
+║ │▓│ │▓│ │░│ │█│      ║!ALTITUDE ░ROP█ING!   ║    ← ◊ →     │!!!│      ║
+║ └┬┘ └┬┘ └┬┘ └┬┘      ║ VEL: CRITIC█L        ║      ↓       ║█▓█║      ║
+║  A   M   S   G   ▓    ╚══════════════════════╝              └───┘      ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+Effects in damaged state:
+  █ ░ ▓ = Random static/glitches (animated)
+  All warning lights red and flashing
+  Text corrupted (random characters)
+  Threat proximity bar full
+  System bars mostly empty
+  Screen flashes red every 2 seconds
+  Sparks appear at panel edges
+  Gauges flicker/freeze randomly
+
+
+================================================================================
+6. RADAR SCOPE - 8 FRAME ROTATION ANIMATION
+================================================================================
+
+Frame 1:          Frame 2:          Frame 3:          Frame 4:
+┌──────────┐      ┌──────────┐      ┌──────────┐      ┌──────────┐
+│    ·│·   │      │    ·│·   │      │    ·│·   │      │    ·│·   │
+│  ·  │  · │      │  ·  ╱  · │      │  ·     · │      │  · ╲   · │
+│─────┼────│      │─────────│       │─────────│       │─────────│
+│  ·  │  · │      │  ·     · │      │  ·  ╲  · │      │  · ╱   · │
+│    ·│·   │      │    ·│·   │      │    ·│·   │      │    ·│·   │
+└──────────┘      └──────────┘      └──────────┘      └──────────┘
+  (0°)              (45°)             (90°)            (135°)
+
+Frame 5:          Frame 6:          Frame 7:          Frame 8:
+┌──────────┐      ┌──────────┐      ┌──────────┐      ┌──────────┐
+│    ·│·   │      │    ·│·   │      │    ·│·   │      │    ·│·   │
+│  ·  │  · │      │  ·  ╲  · │      │  ·     · │      │  · ╱   · │
+│─────┼────│      │─────────│       │─────────│       │─────────│
+│  ·  │  · │      │  ·     · │      │  ·  ╱  · │      │  · ╲   · │
+│    ·│·   │      │    ·│·   │      │    ·│·   │      │    ·│·   │
+└──────────┘      └──────────┘      └──────────┘      └──────────┘
+  (180°)            (225°)            (270°)           (315°)
+
+Loop duration: 2 seconds (8 frames @ 15fps) or 1 second (8 frames @ 30fps)
+Sweep line leaves 4-frame trail (fading green)
+
+
+================================================================================
+7. WARNING LIGHT STATES
+================================================================================
+
+Normal (All Systems OK):
+┌──┬──┬──┐
+│  │  │  │   All lights dark gray (off)
+├──┼──┼──┤
+│  │  │  │
+└──┴──┴──┘
+
+Caution (Minor Issues):
+┌──┬──┬──┐
+│  │◉ │  │   Amber lights pulse slowly (2 sec cycle)
+├──┼──┼──┤   ◉ = Lit (amber)
+│◉ │  │  │
+└──┴──┴──┘
+
+Alert (Critical Issues):
+┌──┬──┬──┐
+│▓▓│▓▓│  │   Red lights flash rapidly (0.5 sec cycle)
+├──┼──┼──┤   ▓▓ = Lit (red, flashing)
+│▓▓│▓▓│▓▓│
+└──┴──┴──┘
+
+All Lights (Emergency):
+┌──┬──┬──┐
+│██│██│██│   All red, synchronized flash
+├──┼──┼──┤   Indicates imminent failure
+│██│██│██│
+└──┴──┴──┘
+
+
+================================================================================
+8. THRUST INDICATOR STATES
+================================================================================
+
+Idle (No thrust):        Forward Thrust:          Reverse Thrust:
+      ↑                        █                        ↑
+    ← ◊ →                    ← ◊ →                    ← ◊ →
+      ↓                        ↓                        █
+
+Strafe Left:             Strafe Right:            Up Thrust:
+      ↑                        ↑                        █
+    █ ◊ →                    ← ◊ █                    ← ◊ →
+      ↓                        ↓                        ↓
+
+Down Thrust:             Multi-Thrust:
+      ↑                      (Forward + Strafe Left)
+    ← ◊ →                        █
+      █                        █ ◊ →
+                                 ↓
+
+█ = Active (bright cyan #0088ff)
+← ↑ → ↓ = Inactive (dark gray #2d2d2d)
+◊ = Ship indicator (always visible)
+
+
+================================================================================
+9. SYSTEM STATUS BAR STATES
+================================================================================
+
+Healthy:          Damaged:          Critical:         Offline:
+ENG [█████]       ENG [███░░]       ENG [█░░░░]       ENG [░░░░░]
+    (Green)           (Amber)           (Red)             (Gray)
+
+Flickering (Malfunctioning):
+Frame 1: ENG [███░░]
+Frame 2: ENG [░░░░░]  ← Goes dark
+Frame 3: ENG [███░░]
+Frame 4: ENG [░░░░░]
+(Repeats every 4 frames when damaged)
+
+
+================================================================================
+10. TEXT DISPLAY MESSAGE TYPES
+================================================================================
+
+┌────────────┐        ┌────────────┐        ┌────────────┐
+│  MSG 001   │        │  MSG 042   │        │  ALERT!    │
+│            │        │            │        │            │
+│  MAINTAIN  │        │ DEBRIS     │        │ HULL       │
+│  ALTITUDE  │        │ DETECTED   │        │ BREACH     │
+│   1200 M   │        │  AHEAD     │        │  IMMINENT  │
+│            │        │            │        │            │
+└────────────┘        └────────────┘        └────────────┘
+  (Normal)             (Warning)             (Critical)
+ Green text           Amber text             Red text
+
+
+================================================================================
+11. GAUGE NEEDLE POSITIONS
+================================================================================
+
+FUEL GAUGE:
+  Full (100%):    Empty (0%):      50%:           25%:
+     │                  \           /\            /
+    /│\                / \         /  \          /
+   / │ \              /   \       /    \        /
+
+
+SPEED GAUGE:
+  0 (Stopped):     5 (Medium):    9 (Maximum):
+     │                /\              \
+    /│\              /  \            / \
+     0               5   9          0   9
+
+
+TEMPERATURE:
+  Cold:            Normal:         Hot:            Critical:
+  C  ||  H         C  ||  H        C  ||  H        C  ||  H
+     ||               ██               ████            ██████
+     ||               ||               ||||            ||||||
+
+
+================================================================================
+12. ANIMATION TIMING REFERENCE
+================================================================================
+
+Element               FPS    Frames   Duration    Loop
+-------------------- ------ -------- ----------- --------
+Radar Sweep           15      8        0.53s      Yes
+Warning Light Pulse   30      4        0.13s      Yes
+Critical Flash        30      2        0.07s      Yes
+Gauge Wobble          60     30        0.50s      Yes
+Screen Flicker        60     60        1.00s      Yes
+Text Scroll           30      1        0.03s      No (continuous)
+Thrust Indicator      60      1        Instant    No
+System Bar Flicker    30      4        0.13s      Yes (when damaged)
+Damage State Flash    30     60        2.00s      Yes (when critical)
+
+
+================================================================================
+END OF ASCII MOCKUP DOCUMENT
+================================================================================
+
+These mockups serve as visual reference for pixel art creation in Aseprite.
+Actual implementation will use 320x224 pixel resolution with defined color
+palettes from COLOR_PALETTES.md
+
+Next Steps:
+1. Open Aseprite with 320x224 canvas
+2. Import harbinger_cockpit.gpl palette (16 colors)
+3. Use these layouts as guides for pixel placement
+4. Refer to COCKPIT_DESIGN_SPEC.md for detailed specifications
+
+"ASCII is the blueprint, pixels are the structure."
+
