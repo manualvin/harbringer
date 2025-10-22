@@ -32,13 +32,31 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   - Core gameplay mechanics (same across both documents)
   - Asset pipeline recommendations
 
+### Pixel Art Design Documents
+
+- **COCKPIT_DESIGN_SPEC.md** - Complete pixel art specification for cockpit UI
+- **COLOR_PALETTES.md** - SNES-era color palette definitions (16-64 colors)
+- **COCKPIT_ASCII_MOCKUP.txt** - ASCII art layout references
+
+### Prototype Development
+
+- **PROTOTYPE_SETUP_GUIDE.md** - Unity setup guide for playable prototype ⚡ **START HERE**
+  - Step-by-step Unity installation and configuration
+  - Placeholder UI with colored rectangles
+  - Complete C# flight control script (ShipController.cs)
+  - Debris spawning system
+  - Collision detection
+  - 1-2 week timeline to playable demo
+
 ## Project Status
 
-**Current Phase:** Pre-development / Design
-- Game design document completed
-- Game engine not yet selected (Unreal Engine 5 recommended, Unity alternative)
-- No implementation code yet
-- Repository structure to be established
+**Current Phase:** Prototype Development
+- ✅ Game design documents completed (modern + retro versions)
+- ✅ Pixel art specifications ready
+- ⏳ Unity prototype in progress (use PROTOTYPE_SETUP_GUIDE.md)
+- Recommended: Unity 2022.3 LTS with URP
+- No production assets yet (using placeholders)
+- Repository structure established
 
 ## License & Legal
 
