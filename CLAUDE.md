@@ -16,11 +16,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Key Documentation
 
-- **GAME_DESIGN_DOCUMENT.md** - Complete game design specification including:
-  - Core gameplay mechanics
-  - Technical requirements
+### Design Documents (Two Approaches)
+
+- **GAME_DESIGN_DOCUMENT.md** - Modern 3D approach with Unreal Engine 5/Unity
+  - High-fidelity graphics with Lumen/Nanite
+  - PBR texturing and realistic lighting
+  - 12-month development timeline
+  - Target: iPhone 12 Pro+ only
+
+- **GAME_DESIGN_DOCUMENT_RETRO.md** - SNES-style retro hybrid approach ⭐ **RECOMMENDED**
+  - Pixel art cockpit + low-poly 3D flight (Star Fox style)
+  - Faster development (6-9 months)
+  - Runs on iPhone 8+
+  - Lower cost, unique aesthetic
+  - Core gameplay mechanics (same across both documents)
   - Asset pipeline recommendations
-  - Development roadmap
 
 ## Project Status
 
@@ -46,23 +56,34 @@ See GAME_DESIGN_DOCUMENT.md Section 8 for detailed legal guidance.
 
 ## Recommended Technology Stack
 
-### Game Engine (Choose One)
-**Primary Recommendation: Unreal Engine 5**
-- Lumen (real-time global illumination)
-- Nanite (high-detail geometry)
-- Niagara (VFX for weather systems)
-- MetaSounds (procedural audio)
+### For Modern 3D Approach
+**Primary: Unreal Engine 5**
+- Lumen, Nanite, Niagara, MetaSounds
 - Native iOS Metal API support
 
 **Alternative: Unity**
 - Universal Render Pipeline (URP)
-- Cinemachine for camera control
-- Shader Graph for custom materials
+- Cinemachine, Shader Graph
 
-### 3D Asset Creation
-- **Blender** - Primary 3D modeling (free)
-- **Substance Painter** - PBR texturing
-- **ZBrush** - High-detail sculpting (optional)
+**Asset Tools:**
+- Blender, Substance Painter, ZBrush
+
+### For Retro Hybrid Approach ⭐ **RECOMMENDED**
+**Primary: Unity**
+- Universal Render Pipeline (URP) - excellent 2D/3D hybrid
+- Built-in sprite system for pixel art
+- Shader Graph for retro effects (flat shading, dithering)
+- Lightweight for mobile
+
+**Alternative: Godot**
+- Open source, excellent 2D/3D support
+- GDScript easy to learn
+
+**Asset Tools:**
+- **Aseprite** ($20) - Pixel art and animation
+- **Blender** (free) - Low-poly 3D modeling (100-200 triangles)
+- **FamiStudio** (free) - Chiptune music composition
+- **BFXR** (free) - Retro sound effects
 
 ### Version Control
 - Git LFS required for binary assets (models, textures, audio)
@@ -104,7 +125,7 @@ harbringer/
 └── Plugins/              # Third-party plugins
 ```
 
-### For Unity:
+### For Unity (Modern 3D):
 ```
 harbringer/
 ├── Assets/
@@ -118,6 +139,37 @@ harbringer/
 └── ProjectSettings/      # Unity configuration
 ```
 
+### For Unity (Retro Hybrid) ⭐ **RECOMMENDED**:
+```
+harbringer/
+├── Assets/
+│   ├── Sprites/          # Pixel art assets
+│   │   ├── Cockpit/      # Cockpit UI elements
+│   │   ├── HUD/          # Gauges, radar, indicators
+│   │   └── Effects/      # Screen glitches, static
+│   ├── Models/           # Low-poly 3D (100-200 tris)
+│   │   ├── Debris/       # Space junk
+│   │   ├── Terrain/      # Planet surface chunks
+│   │   └── Ship/         # Player vessel
+│   ├── Materials/
+│   │   ├── FlatShading.mat    # Retro 3D material
+│   │   └── PixelPerfect.mat   # Sprite material
+│   ├── Scripts/
+│   │   ├── Flight/       # Ship controls
+│   │   ├── Weather/      # Particle systems
+│   │   └── UI/           # HUD management
+│   ├── Audio/
+│   │   ├── Music/        # Chiptune tracks (OGG)
+│   │   ├── SFX/          # Retro sound effects (WAV)
+│   │   └── Ambience/     # Drones, rumbles
+│   └── Scenes/
+│       ├── Phase1_Orbital.unity
+│       ├── Phase2_Descent.unity
+│       └── Phase3_Escape.unity
+├── Packages/             # URP, Input System
+└── ProjectSettings/
+```
+
 ## Development Commands (To Be Added)
 
 After game engine setup, add commands for:
@@ -129,16 +181,21 @@ After game engine setup, add commands for:
 
 ## iOS Platform Requirements
 
-### Minimum Specifications
+### Modern 3D Approach
 - iOS 15.0+
 - iPhone 12 Pro or newer
 - iPad Pro (M1) or newer
 - Metal API support required
-
-### Performance Targets
-- 60 FPS @ 1080p (iPhone)
-- 60 FPS @ native resolution (iPad Pro)
+- 60 FPS @ 1080p (iPhone), 60 FPS @ native resolution (iPad Pro)
 - < 2GB RAM footprint
+
+### Retro Hybrid Approach ⭐ **RECOMMENDED**
+- iOS 13.0+
+- iPhone 8 or newer (wider device support)
+- iPad Air 2 or newer
+- 60 FPS on iPhone 8+ (30 FPS acceptable for retro feel)
+- Render at 640x448, upscale to device resolution
+- < 500MB RAM footprint
 - Touch controls + MFi controller support
 
 ## Architecture Notes (To Be Developed)
@@ -153,28 +210,21 @@ Future sections to add as development progresses:
 
 ## Development Phases
 
-### Phase 1: Prototype (Months 1-3)
-- Core 6DoF flight physics
-- Basic debris field navigation
-- Placeholder assets
+### Modern 3D Approach (12 Months)
+- **Phase 1 (Months 1-3):** Prototype - Core flight physics, basic debris field
+- **Phase 2 (Months 4-6):** Vertical Slice - Atmospheric flight, weather, landing
+- **Phase 3 (Months 7-9):** Complete Loop - Escape sequence, threat, integration
+- **Phase 4 (Months 10-12):** Polish - iOS optimization, QA, App Store submission
 
-### Phase 2: Vertical Slice (Months 4-6)
-- Atmospheric flight model
-- Weather system implementation
-- Landing mechanics
-- Visual polish
-
-### Phase 3: Complete Loop (Months 7-9)
-- Escape sequence
-- System failure mechanics
-- Threat implementation
-- Integration
-
-### Phase 4: Polish (Months 10-12)
-- iOS optimization
-- QA and bug fixing
-- Audio mastering
-- App Store submission
+### Retro Hybrid Approach ⭐ **RECOMMENDED** (6-9 Months)
+- **Month 1:** Core flight prototype + low-poly debris
+- **Month 2:** Pixel art cockpit + HUD implementation
+- **Month 3:** Phase 1 complete (orbital navigation)
+- **Month 4:** Atmospheric flight + weather systems
+- **Month 5:** Phase 2 complete (landing mechanics)
+- **Month 6:** Phase 3 complete (escape sequence)
+- **Months 7-8:** Integration, polish, optimization
+- **Month 9:** QA, release prep, App Store submission
 
 ## Important Conventions (To Be Established)
 
